@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seciteci RFID Sistem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #aeaeae; /* Fundo escuro */
+            color: #dee4eb; /* Cor do texto claro para contraste */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .flash-message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        .flash-message.success {
+            background-color: #16a34a; /* Verde escuro */
+            color: #ecfdf5; /* Texto quase branco */
+            border: 1px solid #047857;
+        }
+        .flash-message.danger {
+            background-color: #dc2626; /* Vermelho escuro */
+            color: #fef2f2; /* Texto quase branco */
+            border: 1px solid #b91c1c;
+        }
+        /* Ajustes para elementos dentro do main, se necessário, para garantir o contraste */
+        .bg-white { /* Garante que o main também tenha um fundo escuro */
+            background-color: #030304; /* Tom mais claro de cinza escuro */
+        }
+        .text-gray-800 {
+            color: #a7aaaa; /* Texto mais claro */
+        }
+        .text-gray-700 {
+            color: #bcbec2; /* Texto mais claro */
+        }
+        .text-gray-600 {
+            color: #bec4c9; /* Texto mais claro */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex flex-col">
+    <nav class="bg-blue-800 p-4 text-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            {# O nome do projeto 'RFID Sistem' é o link principal para a página inicial #}
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold rounded-lg hover:bg-blue-700 p-2 transition duration-200">RFID Sistem</a>
+            <div class="space-x-4">
+                {# Botão 'Início' explícito, também linkando para a página inicial #}
+                <a href="{{ url_for('index') }}" class="py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">Início</a>
+                {# Links para as outras seções do sistema #}
+                <a href="{{ url_for('listar_bens') }}" class="py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">Bens</a>
+                <a href="{{ url_for('listar_usuarios') }}" class="py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">Usuários</a>
+                <a href="{{ url_for('listar_ambientes') }}" class="py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">Ambientes</a>
+                <a href="{{ url_for('listar_movimentacoes') }}" class="py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">Movimentações</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto mt-8 p-4 bg-gray-800 rounded-lg shadow-lg">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-700 p-4 mt-8 text-center text-gray-400 rounded-b-lg">
+        &copy; {{ moment().format('YYYY') }} RFID Sistem. Todos os direitos reservados.
+    </footer>
+
+    {{ moment.include_moment() }}
+    {{ moment.locale('pt-br') }}
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Ambientes{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Lista de Ambientes</h1>
+<div class="mb-6">
+    <a href="{{ url_for('criar_ambiente') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">
+        Adicionar Novo Ambiente
+    </a>
+</div>
+
+<div class="overflow-x-auto bg-white rounded-lg shadow-md">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Ambiente</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Localização</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tag RFID Ativa</th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for ambiente in ambientes %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ ambiente.id_ambiente }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ ambiente.nome_ambiente }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ ambiente.localizacao }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ ambiente.tag_rfid_ativo }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="{{ url_for('editar_ambiente', id_ambiente=ambiente.id_ambiente) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Editar</a>
+                    <form action="{{ url_for('deletar_ambiente', id_ambiente=ambiente.id_ambiente) }}" method="POST" class="inline-block" onsubmit="return confirm('Tem certeza que deseja deletar este ambiente?');">
+                        <button type="submit" class="text-red-600 hover:text-red-900">Deletar</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Nenhum ambiente registrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

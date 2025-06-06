@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatório de Movimentações por Período{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-100 mb-6">Relatório de Movimentações por Período</h1>
+
+<form action="{{ url_for('relatorio_movimentacoes_periodo') }}" method="POST" class="bg-gray-700 p-6 rounded-lg shadow-md mb-8 space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label for="data_inicio" class="block text-sm font-medium text-gray-300 mb-1">Data de Início:</label>
+            <input type="date" id="data_inicio" name="data_inicio" required value="{{ data_inicio.strftime('%Y-%m-%d') if data_inicio else '' }}"
+                   class="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md shadow-sm text-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+            <label for="data_fim" class="block text-sm font-medium text-gray-300 mb-1">Data de Fim:</label>
+            <input type="date" id="data_fim" name="data_fim" required value="{{ data_fim.strftime('%Y-%m-%d') if data_fim else '' }}"
+                   class="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md shadow-sm text-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+    </div>
+    
+    {% if erro_datas %}
+        <div class="flash-message danger" role="alert">
+            {{ erro_datas }}
+        </div>
+    {% endif %}
+
+    <div class="flex justify-end">
+        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Gerar Relatório
+        </button>
+    </div>
+</form>
+
+{% if movimentacoes %}
+    <h2 class="text-2xl font-bold text-gray-100 mb-4">Resultados do Relatório:</h2>
+    <div class="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
+        <table class="min-w-full divide-y divide-gray-600">
+            <thead class="bg-gray-800">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ID</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tag RFID do Item</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tipo de Item</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Ambiente do Leitor</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Data/Hora</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tipo de Movimentação</th>
+                </tr>
+            </thead>
+            <tbody class="bg-gray-700 divide-y divide-gray-600">
+                {% for mov in movimentacoes %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">{{ mov.id_movimentacao }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ mov.tag_rfid_item }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ mov.tipo_item }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        {% if mov.ambiente_leitor %}{{ mov.ambiente_leitor.nome_ambiente }}{% else %}N/A{% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ mov.data_hora.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            {% if mov.tipo_movimentacao == 'entrada' %}bg-green-700 text-green-200
+                            {% else %}bg-red-700 text-red-200{% endif %}">
+                            {{ mov.tipo_movimentacao|capitalize }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% elif request.method == 'POST' and not erro_datas %}
+    <div class="flash-message info" role="alert">
+        Nenhuma movimentação encontrada para o período selecionado.
+    </div>
+{% endif %}
+{% endblock %}

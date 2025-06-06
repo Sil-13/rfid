@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-4xl font-extrabold text-blue-300 mb-6 text-center">Seciteci RFID Sistem</h1>
+<p class="text-lg text-gray-300 mb-8 text-center">
+    Gerencie e rastreie todos os bens e usuários de forma eficiente e em tempo real.
+</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-gray-700 p-6 rounded-lg shadow-md text-center transform hover:scale-105 transition-transform duration-300">
+        {# SVGs removidos #}
+        <h2 class="text-xl font-semibold text-gray-100 mb-2">Bens</h2>
+        <p class="text-gray-300">Cadastre e acompanhe o inventário de todos os ativos da escola.</p>
+        <a href="{{ url_for('listar_bens') }}" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Ver Bens</a>
+    </div>
+
+    <div class="bg-gray-700 p-6 rounded-lg shadow-md text-center transform hover:scale-105 transition-transform duration-300">
+        {# SVGs removidos #}
+        <h2 class="text-xl font-semibold text-gray-100 mb-2">Usuários</h2>
+        <p class="text-gray-300">Gerencie informações e crachás RFID de alunos, professores e funcionários.</p>
+        <a href="{{ url_for('listar_usuarios') }}" class="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Ver Usuários</a>
+    </div>
+
+    <div class="bg-gray-700 p-6 rounded-lg shadow-md text-center transform hover:scale-105 transition-transform duration-300">
+        {# SVGs removidos #}
+        <h2 class="text-xl font-semibold text-gray-100 mb-2">Ambientes</h2>
+        <p class="text-gray-300">Defina e monitore os ambientes físicos da escola com leitores RFID ativos.</p>
+        <a href="{{ url_for('listar_ambientes') }}" class="mt-4 inline-block bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Ver Ambientes</a>
+    </div>
+
+    <div class="bg-gray-700 p-6 rounded-lg shadow-md text-center transform hover:scale-105 transition-transform duration-300">
+        {# SVGs removidos #}
+        <h2 class="text-xl font-semibold text-gray-100 mb-2">Movimentações</h2>
+        <p class="text-gray-300">Visualize o histórico de todas as entradas e saídas de bens e pessoas.</p>
+        <a href="{{ url_for('listar_movimentacoes') }}" class="mt-4 inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Ver Movimentações</a>
+    </div>
+</div>
+
+<div class="mt-10 text-center">
+    <h2 class="text-2xl font-bold text-gray-100 mb-4">Como Funciona?</h2>
+    <p class="text-gray-300 leading-relaxed max-w-2xl mx-auto">
+        Este sistema utiliza tags RFID passivas em bens e crachás de usuários, e leitores RFID ativos nas portas dos ambientes. 
+        Cada passagem é sincronizada com o banco de dados MySQL, atualizando a localização dos bens e registrando as movimentações.
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Bem{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-200 mb-6">Editar Bem: {{ bem.nome }}</h1>
+
+<form action="{{ url_for('editar_bem', id_bem=bem.id_bem) }}" method="POST" class="space-y-4">
+    <div>
+        <label for="tag_rfid" class="block text-sm font-medium text-gray-200">Tag RFID (não editável):</label>
+        <input type="text" id="tag_rfid" name="tag_rfid" value="{{ bem.tag_rfid }}" readonly class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed sm:text-sm">
+    </div>
+    <div>
+        <label for="nome" class="block text-sm font-medium text-gray-200">Nome:</label>
+        <input type="text" id="nome" name="nome" value="{{ bem.nome }}" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+    </div>
+    <div>
+        <label for="descricao" class="block text-sm font-medium text-gray-200">Descrição:</label>
+        <textarea id="descricao" name="descricao" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">{{ bem.descricao }}</textarea>
+    </div>
+    <div>
+        <label for="numero_serie" class="block text-sm font-medium text-gray-200">Número de Série:</label>
+        <input type="text" id="numero_serie" name="numero_serie" value="{{ bem.numero_serie }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+    </div>
+    <div>
+        <label for="id_ambiente_atual" class="block text-sm font-medium text-gray-200">Ambiente Atual:</label>
+        <select id="id_ambiente_atual" name="id_ambiente_atual" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <option value="">-- Selecione --</option>
+            {% for ambiente in ambientes %}
+                <option value="{{ ambiente.id_ambiente }}" {% if bem.id_ambiente_atual == ambiente.id_ambiente %}selected{% endif %}>
+                    {{ ambiente.nome_ambiente }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="data_aquisicao" class="block text-sm font-medium text-gray-200">Data de Aquisição:</label>
+        <input type="date" id="data_aquisicao" name="data_aquisicao" value="{{ bem.data_aquisicao.strftime('%Y-%m-%d') if bem.data_aquisicao else '' }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+    </div>
+    <div>
+        <label for="valor_aquisicao" class="block text-sm font-medium text-gray-200">Valor de Aquisição:</label>
+        <input type="number" step="0.01" id="valor_aquisicao" name="valor_aquisicao" value="{{ '%.2f' | format(bem.valor_aquisicao) if bem.valor_aquisicao else '' }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+    </div>
+    <div>
+        <label for="status" class="block text-sm font-medium text-gray-200">Status:</label>
+        <select id="status" name="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <option value="Disponível" {% if bem.status == 'Disponível' %}selected{% endif %}>Disponível</option>
+            <option value="Em Uso" {% if bem.status == 'Em Uso' %}selected{% endif %}>Em Uso</option>
+            <option value="Manutenção" {% if bem.status == 'Manutenção' %}selected{% endif %}>Manutenção</option>
+            <option value="Desativado" {% if bem.status == 'Desativado' %}selected{% endif %}>Desativado</option>
+        </select>
+    </div>
+    
+    <div class="flex justify-end space-x-3">
+        <a href="{{ url_for('listar_bens') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Cancelar
+        </a>
+        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Salvar Alterações
+        </button>
+    </div>
+</form>
+{% endblock %}
